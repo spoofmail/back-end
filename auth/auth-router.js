@@ -46,7 +46,7 @@ function generateToken(user) {
     username: user.username
   };
 
-  const jwtSecret = process.env.JWT_SECRET || 'keep it secret, keep it safe!';
+  const jwtSecret = process.env.JWT_SECRET || 'Spoofmail Secret!';
   const jwtOptions = {
     expiresIn: '1d'
   }
