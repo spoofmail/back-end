@@ -13,7 +13,7 @@ router.get('/', restricted, (req, res) => {
 
 router.post('/to', (req, res) => {
 
-      res.status(400).json(req.body.to);
+  res.status(200).json(req.body.to);
     
 });
 
