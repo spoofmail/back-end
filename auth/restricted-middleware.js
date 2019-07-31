@@ -1,11 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-parseJwt = function(token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace('-', '+').replace('_', '/');
-  return JSON.parse($window.atob(base64));
-}
-
 module.exports = (req, res, next) => {
 
   const token = req.headers.authorization
@@ -19,7 +13,9 @@ module.exports = (req, res, next) => {
       } else {
         //valid token
         
-        req.jwt = parseJwt(token)
+        req.jwt = { username: decoded.username, user_id: decoded.subject }
+
+
 
         next();
       }
