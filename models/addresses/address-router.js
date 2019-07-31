@@ -16,22 +16,28 @@ function generateRandomName(length) {
     return name;
 }
 
-router.get('/:id', restricted, (req, res) => {
+router.get('/', restricted, (req, res) => {
   
-  const  user_id  = req.params.id
+    let user_id = 0;
+    console.log(req.jwt)
+    console.log(req.jwt.username)
 
+  Users.findBy({ username: req.jwt.username }).first().then(user => {
+    user_id = user.id
+    
     Addresses.findBy({ user_id })
     .then(addresses => {
       res.json(addresses);
     })
     .catch(err => res.send(err));
+  })
 });
 
 router.post('/', restricted, (req, res) => {
     let checker = false;
     let tag = req.body.addresstag
     let user_id = 0
-    Users.findBy({ username: req.body.username }).first().then(user => {
+    Users.findBy({ username: req.jwt.username }).first().then(user => {
         console.log('user ID from findBy: ', user.id)
         let user_id = user.id
         console.log(user_id)

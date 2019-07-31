@@ -11,19 +11,14 @@ router.get('/', restricted, (req, res) => {
     .catch(err => res.send(err));
 });
 
-router.get('/:id', restricted, (req, res) => {
-  let { id } = req.params
-  
-  Users.findById(id)
-    .then(user => {
-      res.json(user);
-    })
-    .catch(err => res.send(err));
+router.get('/session', restricted, (req, res) => {
+  console.log(req.jwt)
+  res.status(200).json(req.jwt)
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/', async (req, res) => {
   try {
-    const user = await Users.update(req.params.id, req.body);
+    const user = await Users.update(req.jwt.user_id, req.body);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -38,9 +33,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
-    const count = await Users.remove(req.params.id);
+    const count = await Users.remove(req.jwt.user_id);
     if (count > 0) {
       res.status(200).json({ message: 'The user has been nuked' });
     } else {

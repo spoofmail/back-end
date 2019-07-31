@@ -45,16 +45,18 @@ router.post('/login', (req, res) => {
 });
 
 function generateToken(user) {
+  console.log("user: ", user)
   const jwtPayload = {
     subject: user.id,
-    username: user.username
+    username: user.username,
+    user_id: user.user_id
   };
 
   const jwtSecret = process.env.JWT_SECRET || 'Spoofmail Secret!';
   const jwtOptions = {
     expiresIn: '1d'
   }
-
+  
   return jwt.sign(jwtPayload, jwtSecret, jwtOptions)
 }
 
