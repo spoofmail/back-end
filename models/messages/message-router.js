@@ -8,7 +8,7 @@ let axios = require('axios')
 
 let activateLink = (code) => {
 
-    let array = code.split('<a href=')
+    let array = code.split('href=')
 
     console.log(array)
     
@@ -54,8 +54,13 @@ router.post('/', (req, res) => {
         res.status(200).json({
           message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`
         });
+            Messages.findBy( { address_id } ).then((messages) => {
+                if(messages.length < 3 ) {
+                    activateLink(finalMessage.html)
+                }
+            })
 
-        activateLink(finalMessage.html)
+        
       })
       .catch(error => {
         res.status(500).json(error);
