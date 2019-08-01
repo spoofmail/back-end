@@ -47,7 +47,7 @@ router.post('/', restricted, (req, res) => {
             let alreadyExists = Addresses.findBy( {addressname: addressname} )
             if (!alreadyExists.length) {checker = true}
         }
-        let address = { addressname: addressname, addressTag: tag, user_id: user_id }
+        let address = { addressname: addressname, addresstag: tag, user_id: user_id }
         console.log(address)
         Addresses.add(address)
         .then(saved => {
