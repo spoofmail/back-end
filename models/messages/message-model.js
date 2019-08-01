@@ -17,7 +17,7 @@ function findBy(filter) {
 }
 
 async function add(message) {
-  const [id] = await db('messages').insert(message, "id");
+  const [id] = await db('messages').insert(message, 'id');
 
   return findById(id);
 }
