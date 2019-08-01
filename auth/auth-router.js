@@ -2,7 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
-const Users = require('../users/users-model.js');
+const Users = require('../models/users/users-model.js');
 
 // for endpoints beginning with /api/auth
 router.post('/register', (req, res) => {
@@ -12,15 +12,18 @@ router.post('/register', (req, res) => {
 
   Users.add(user)
     .then(saved => {
-      const token = generateToken(user)
-      console.log(token)
-      res.status(200).json({
-        message: `Welcome ${user.username}!`, token
-      });
+      Users.findBy({ username: user.username }).first().then(user => {
+        const token = generateToken(user)
+        console.log(token)
+        res.status(200).json({
+          message: `Welcome ${user.username}!`, token
+        });
+      })
+        .catch(error => {
+          res.status(500).json(error);
+        });
     })
-    .catch(error => {
-      res.status(500).json(error);
-    });
+
 });
 
 router.post('/login', (req, res) => {
@@ -45,9 +48,10 @@ router.post('/login', (req, res) => {
 });
 
 function generateToken(user) {
+  console.log("user: ", user)
   const jwtPayload = {
     subject: user.id,
-    username: user.username
+    username: user.username,
   };
 
   const jwtSecret = process.env.JWT_SECRET || 'Spoofmail Secret!';

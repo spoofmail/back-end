@@ -6,12 +6,17 @@ module.exports = (req, res, next) => {
   const secret = process.env.JWT_SECRET || 'Spoofmail Secret!';
 
   if (token) {
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, secret, {}, (err, decoded) => {
       if(err) {
         //invalid token
         res.status(401).json({ you: 'shall not pass'}) 
       } else {
         //valid token
+        
+        req.jwt = { username: decoded.username, user_id: decoded.subject }
+
+
+
         next();
       }
     });
