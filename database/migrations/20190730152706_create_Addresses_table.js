@@ -5,7 +5,6 @@ exports.up = function(knex) {
       addresses
         .string('addressname', 128)
         .notNullable()
-        .unique();
       
       addresses
         .string('addresstag', 128)
