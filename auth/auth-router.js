@@ -15,7 +15,7 @@ router.post('/register', (req, res) => {
       Users.findBy({ username: user.username }).first().then(user => {
         const token = generateToken(user)
         console.log(token)
-        res.status(200).json({
+        res.status(201).json({
           message: `Welcome ${user.username}!`, token
         });
       })
