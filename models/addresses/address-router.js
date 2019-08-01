@@ -66,7 +66,9 @@ router.post('/', restricted, (req, res) => {
 
   router.delete('/:id', restricted, async (req, res) => {
     try {
-      const count = await Adresses.remove(req.params.id);
+      const count = await Addresses.remove(req.params.id);
+
+      console.log(count)
       if (count > 0) {
         res.status(200).json({ message: 'The address has been nuked' });
       } else {
