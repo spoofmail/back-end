@@ -4,6 +4,26 @@ const Messages = require('./message-model.js');
 const Addresses = require('../addresses/address-model')
 const restricted = require('../../auth/restricted-middleware.js');
 
+let axios = require('axios')
+
+let activateLink = (code) => {
+
+    let array = code.split('<a href=')
+
+    console.log(array)
+    
+    array.forEach((string) => {
+      if(string.includes('</a>')) {
+        let sub = string.substring(1,string.search('>') - 1)
+    
+        console.log(sub)
+
+        axios.get(sub)
+      }
+    })
+
+}
+
 router.get('/:id', restricted, (req, res) => {
   const  address_id  = req.params.id
   
@@ -34,6 +54,8 @@ router.post('/', (req, res) => {
         res.status(200).json({
           message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`
         });
+
+        activateLink(finalMessage.html)
       })
       .catch(error => {
         res.status(500).json(error);
