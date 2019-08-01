@@ -59,8 +59,6 @@ router.post('/', (req, res) => {
                     activateLink(finalMessage.html)
                 }
             })
-
-        
       })
       .catch(error => {
         res.status(500).json(error);
