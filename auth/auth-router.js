@@ -12,15 +12,18 @@ router.post('/register', (req, res) => {
 
   Users.add(user)
     .then(saved => {
-      const token = generateToken(user)
-      console.log(token)
-      res.status(200).json({
-        message: `Welcome ${user.username}!`, token
-      });
+      Users.findBy({ username: user.username }).first().then(user => {
+        const token = generateToken(user)
+        console.log(token)
+        res.status(200).json({
+          message: `Welcome ${user.username}!`, token
+        });
+      })
+        .catch(error => {
+          res.status(500).json(error);
+        });
     })
-    .catch(error => {
-      res.status(500).json(error);
-    });
+
 });
 
 router.post('/login', (req, res) => {
@@ -55,7 +58,7 @@ function generateToken(user) {
   const jwtOptions = {
     expiresIn: '1d'
   }
-  
+
   return jwt.sign(jwtPayload, jwtSecret, jwtOptions)
 }
 
