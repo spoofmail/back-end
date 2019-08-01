@@ -4,8 +4,10 @@
   "description": "Auth III Module Guided Project",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon",
-    "start": "node index.js"
+    "start": "node index.js",
+    "server": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "npm install --production && knex migrate:latest"
   },
   "keywords": [],
   "author": "Lambda School",
