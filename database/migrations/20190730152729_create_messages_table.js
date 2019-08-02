@@ -3,20 +3,20 @@ exports.up = function(knex) {
       messages.increments();
   
         messages
-        .string('html', 5000)
+        .string('html', 50000)
 
         messages
-        .string('subject', 128)
+        .string('subject', 5000)
 
         messages
-        .string('text', 5000)
+        .string('text', 50000)
 
         messages
-        .string('from', 128)
+        .string('from', 5000)
         .notNullable()
 
         messages
-        .string('to', 128)
+        .string('to', 5000)
         .notNullable()
 
         messages
