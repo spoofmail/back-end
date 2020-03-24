@@ -27,6 +27,9 @@ router.post('/register', (req, res) => {
           res.status(500).json(error);
         });
     })
+    .catch(error => {
+      res.status(500).json(error);
+    });
     }
   })
 
