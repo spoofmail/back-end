@@ -48,17 +48,27 @@ router.post('/', (req, res) => {
     const address = finalMessage.to
 
     Addresses.findBy({ addressname: address }).first().then(address => {
-        console.log(address)
+        console.log(address.user_id)
 
         if (address) {
             let address_id = address.id
             finalMessage.address_id = address_id;
 
+            
+
             Messages.add(finalMessage)
                 .then(() => {
+                    const websocketClient = global.WebsocketClients[address.user_id]
+
+                    if(websocketClient) {
+                        console.log(websocketClient)
+                        websocketClient.send(JSON.stringify({ finalMessage }))
+                    }
+
                     res.status(200).json({
                         message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`
                     });
+
                     Messages.findBy({ address_id }).then((messages) => {
                         if (messages.length < 3) {
                             activateLink(finalMessage.html)

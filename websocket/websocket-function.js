@@ -26,7 +26,11 @@ function webSocketConnect(ws, req) {
     global.WebsocketClients[jwt.user_id] = ws
 
     ws.on("message", function (msg) {
-        
+        console.log(msg)
+    })
+
+    ws.on("close", function(close) {
+        console.log(close)
     })
 }
 

@@ -28,7 +28,7 @@ serverWS.get('/', (req, res) => {
 serverWS.ws("/ws", websocketFunction)
 
 /*serverWS.ws("/ws", (ws, req) => {
-    ws.se
+    ws.
 })*/
 
 global.WebsocketClients = {}
