@@ -1,4 +1,5 @@
 const express = require('express');
+const expressWS = require("express-ws")
 const helmet = require('helmet');
 const cors = require('cors');
 
@@ -6,20 +7,30 @@ const authRouter = require('../auth/auth-router.js');
 const usersRouter = require('../models/users/users-router.js');
 const messagesRouter = require('../models/messages/message-router.js');
 const addressesRouter = require('../models/addresses/address-router.js');
+const websocketFunction = require("../websocket/websocket-function")
 
 const server = express();
+const serverWS = expressWS(server).app
 
-server.use(helmet());
-server.use(express.json());
-server.use(cors());
+serverWS.use(helmet());
+serverWS.use(express.json());
+serverWS.use(cors());
 
-server.use('/api/auth', authRouter);
-server.use('/api/users', usersRouter);
-server.use('/api/messages', messagesRouter);
-server.use('/api/addresses', addressesRouter);
+serverWS.use('/api/auth', authRouter);
+serverWS.use('/api/users', usersRouter);
+serverWS.use('/api/messages', messagesRouter);
+serverWS.use('/api/addresses', addressesRouter);
 
-server.get('/', (req, res) => {
-  res.send("Welcome to the Spoofmail Backend!");
+serverWS.get('/', (req, res) => {
+    res.send("Welcome to the Spoofmail Backend!");
 });
 
-module.exports = server;
+serverWS.ws("/ws", websocketFunction)
+
+/*serverWS.ws("/ws", (ws, req) => {
+    ws.se
+})*/
+
+global.WebsocketClients = {}
+
+module.exports = serverWS;
