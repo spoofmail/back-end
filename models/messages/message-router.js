@@ -57,7 +57,6 @@ router.post('/', (req, res) => {
                     const websocketClient = global.WebsocketClients[addressRes.user_id]
 
                     if(websocketClient) {
-                        console.log(websocketClient)
                         websocketClient.send(JSON.stringify({ finalMessage }))
                     }
 
