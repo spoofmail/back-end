@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
 
             Messages.add(finalMessage)
                 .then((saved) => {
-                    broadcast(addressRes.user_id, { finalMessage })
+                    broadcast(addressRes.user_id, { finalMessage: saved })
 
                     res.status(200).json({
                         message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`,
