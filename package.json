@@ -7,7 +7,7 @@
     "start": "node index.js",
     "server": "nodemon server.js",
     "test": "cross-env DB_ENV=testing jest --watch",
-    "heroku-postbuild": "npm install --production && knex migrate:latest"
+    "heroku-postbuild": "yarn install --production && knex migrate:latest"
   },
   "keywords": [],
   "author": "Lambda School",
