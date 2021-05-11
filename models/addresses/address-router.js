@@ -43,7 +43,7 @@ router.post('/', restricted, (req, res) => {
         console.log(user_id)
         let addressname = ''
         while(!checker) {
-            addressname = generateRandomName(7) + '@servicetechlink.com'
+            addressname = generateRandomName(7) + '@spoofmail.us'
             let alreadyExists = Addresses.findBy( {addressname: addressname} )
             if (!alreadyExists.length) {checker = true}
         }
