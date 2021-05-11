@@ -47,18 +47,14 @@ router.post('/', (req, res) => {
 
     const address = finalMessage.to
 
-    Addresses.findBy({ addressname: address }).first().then(address => {
-        console.log(address.user_id)
-
-        if (address) {
-            let address_id = address.id
+    Addresses.findBy({ addressname: address }).first().then(addressRes => {
+        if (addressRes) {
+            let address_id = addressRes.id
             finalMessage.address_id = address_id;
-
-            
 
             Messages.add(finalMessage)
                 .then(() => {
-                    const websocketClient = global.WebsocketClients[address.user_id]
+                    const websocketClient = global.WebsocketClients[addressRes.user_id]
 
                     if(websocketClient) {
                         console.log(websocketClient)

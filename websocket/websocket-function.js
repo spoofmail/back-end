@@ -32,6 +32,8 @@ function webSocketConnect(ws, req) {
     ws.on("close", function(close) {
         console.log(close)
     })
+
+    ws.send("Successfully connected")
 }
 
 module.exports = webSocketConnect
