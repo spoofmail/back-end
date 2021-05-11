@@ -7,7 +7,7 @@ const authRouter = require('../auth/auth-router.js');
 const usersRouter = require('../models/users/users-router.js');
 const messagesRouter = require('../models/messages/message-router.js');
 const addressesRouter = require('../models/addresses/address-router.js');
-const websocketFunction = require("../websocket/websocket-function")
+const { webSocketConnect } = require("../websocket/websocket-function")
 
 const server = express();
 const serverWS = expressWS(server).app
@@ -25,12 +25,6 @@ serverWS.get('/', (req, res) => {
     res.send("Welcome to the Spoofmail Backend!");
 });
 
-serverWS.ws("/ws", websocketFunction)
-
-/*serverWS.ws("/ws", (ws, req) => {
-    ws.
-})*/
-
-global.WebsocketClients = {}
+serverWS.ws("/ws", webSocketConnect)
 
 module.exports = serverWS;
