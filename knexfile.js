@@ -1,3 +1,8 @@
+const parse = require('pg-connection-string').parse;
+const pgconfig = parse(process.env.DATABASE_URL);
+pgconfig.ssl = { rejectUnauthorized: false };
+
+
 module.exports = {
   development: {
     client: 'sqlite3',
@@ -20,11 +25,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL || {
-      database: 'DB',
-      user: "user",
-      password: "password"
-    },
+    connection: pgconfig,
     migrations: {
       directory: './database/migrations',
     },
