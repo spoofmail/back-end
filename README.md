@@ -3,6 +3,6 @@ Express server connected with PostgresSQL managed by Knex. Deployed to Heroku. R
 
 Heroku Live: https://spoofmail-lambda.herokuapp.com/
 
-SpoofMail frontend: https://github.com/spoofmail/front-end
+SpoofMail Frontend: https://github.com/spoofmail/front-end
 
 Spoofmail MailServer: https://github.com/spoofmail/mailserver
