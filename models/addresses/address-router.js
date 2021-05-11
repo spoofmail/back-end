@@ -52,9 +52,8 @@ router.post('/', restricted, (req, res) => {
         Addresses.add(address)
         .then(saved => {
             res.status(200).json({
-            message: `${address.addressname} has been added to the user`,
-            address,
-            saved
+              message: `${address.addressname} has been added to the user`,
+              saved
             });
         })
         .catch(error => {

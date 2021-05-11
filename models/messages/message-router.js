@@ -55,11 +55,12 @@ router.post('/', (req, res) => {
             finalMessage.address_id = address_id;
 
             Messages.add(finalMessage)
-                .then(() => {
+                .then((saved) => {
                     broadcast(addressRes.user_id, { finalMessage })
 
                     res.status(200).json({
-                        message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`
+                        message: `Message from ${finalMessage.from} has been added to inbox ID: ${address_id}`,
+                        saved,
                     });
 
                     Messages.findBy({ address_id }).then((messages) => {
@@ -83,7 +84,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const count = await Messages.remove(req.params.id);
         if (count > 0) {
-            res.status(200).json({ message: 'The message has been nuked' });
+            res.status(200).json({ message: 'The message has been nuked', id: req.params.id });
         } else {
             res.status(404).json({ message: 'The message could not be found' });
         }
