@@ -1,18 +1,11 @@
 const router = require('express').Router();
+const npmlog = require('npmlog')
 
 const Users = require('./users-model.js');
 const restricted = require('../../auth/restricted-middleware.js');
-
-router.get('/', restricted, (req, res) => {
-  Users.find()
-    .then(users => {
-      res.json(users);
-    })
-    .catch(err => res.send(err));
-});
+const { userHash } = require('../../hashids/hashid.js');
 
 router.get('/session', restricted, (req, res) => {
-  console.log(req.jwt)
   res.status(200).json(req.jwt)
 });
 
@@ -20,16 +13,20 @@ router.put('/', async (req, res) => {
   try {
     const user = await Users.update(req.jwt.user_id, req.body);
     if (user) {
-      res.status(200).json(user);
+      res.status(200).json({ status: 'success', message: 'Successfully updated the user', user });
     } else {
-      res.status(404).json({ message: 'The user could not be found' });
+      res.status(404).json({ status: 'error', message: 'The user could not be found' });
     }
   } catch (error) {
-    // log error to server
-    console.log(error);
-    res.status(500).json({
-      message: 'Error updating the user',
-    });
+    npmlog.error(req.uuid, `An error occurred in ${req.path} while trying to update user`, {
+      uuid: req.uuid,
+      path: '/',
+      data: {
+        body: req.body,
+      },
+      error: error,
+    })
+    res.status(500).json({ status: 'error', message: 'An error occurred while trying to update the user' });
   }
 });
 
@@ -37,16 +34,21 @@ router.delete('/', async (req, res) => {
   try {
     const count = await Users.remove(req.jwt.user_id);
     if (count > 0) {
-      res.status(200).json({ message: 'The user has been nuked' });
+      res.status(200).json({ status: 'success', message: 'The user has been deleted' });
     } else {
-      res.status(404).json({ message: 'The user could not be found' });
+      res.status(404).json({ status: 'error', message: 'The user could not be found' });
     }
   } catch (error) {
-    // log error to server
-    console.log(error);
-    res.status(500).json({
-      message: 'Error removing the user',
-    });
+    npmlog.error(req.uuid, `An error occurred in ${req.path} while trying to delete the user`, {
+      uuid: req.uuid,
+      path: '/',
+      data: {
+        hashedUserId: req.jwt.user_id,
+        userId: userHash.decode(req.jwt.user_id),
+      },
+      error: error,
+    })
+    res.status(500).json({ status: 'error', message: 'An error occurred while trying to delete the user' });
   }
 });
 

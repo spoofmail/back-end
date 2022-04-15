@@ -1,9 +1,10 @@
 const db = require('../../database/dbConfig.js');
+const { userHash } = require('../../hashids/hashid.js');
 
 module.exports = {
   add,
   find,
-  findBy,
+  findByUsername,
   findById,
   remove,
   update
@@ -13,30 +14,56 @@ function find() {
   return db('users').select('id', 'username', 'password');
 }
 
-function findBy(filter) {
-  return db('users').where(filter);
+function findByUsername(username) {
+  return new Promise(function(resolve, reject) {
+    const query = db('users').where('username', username).first();
+
+    query.then(user => {
+      if (!user) return resolve(null)
+
+      resolve({
+        ...user,
+        id: userHash.encode(user.id)
+      })
+    })
+    .catch(err => {
+      reject(err)
+    })
+  })
 }
 
 async function add(user) {
-  const [id] = await db('users').insert(user, "id");
+  const [result] = await db('users').insert(user, "id");
 
-  return findById(id);
+  return findById(userHash.encode(result.id));
 }
 
 function findById(id) {
-  return db('users')
-    .where({ id })
-    .first();
+  return new Promise(function(resolve, reject) {
+    const query = db('users')
+      .where('id', userHash.decode(id))
+      .first();
+
+    query.then(result => {
+      resolve({
+        ...result,
+        id: userHash.encode(result.id),
+      })
+    })
+    .catch(err => {
+      reject(err)
+    })
+  })
 }
 
 function remove(id) {
   return db('users')
-    .where({ id })
+    .where('id', userHash.decode(id))
     .del();
 }
 
 function update(id, changes) {
   return db('users')
-    .where({ id })
+    .where('id', userHash.decode(id))
     .update(changes, '*');
 }

@@ -27,6 +27,16 @@ exports.up = function(knex) {
         .inTable('addresses')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
+
+        // messages.index(['address_id'], 'address_id_index', );
+        messages
+          .integer('user_id')
+          .unsigned()
+          .notNullable()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE')
+          .onUpdate('CASCADE');
     });
   };
   

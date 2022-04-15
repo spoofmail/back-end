@@ -1,26 +1,23 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-
-  const token = req.headers.authorization
+  const token = req.headers.authorization;
   const secret = process.env.JWT_SECRET || 'Spoofmail Secret!';
 
   if (token) {
     jwt.verify(token, secret, {}, (err, decoded) => {
       if(err) {
-        //invalid token
-        res.status(401).json({ you: 'shall not pass'}) 
+        return res.status(401).json({ status: 'error', message: 'Error validating token provided' }) 
       } else {
-        //valid token
-        
-        req.jwt = { username: decoded.username, user_id: decoded.subject }
-
-
+        req.jwt = { 
+          username: decoded.username, 
+          user_id: decoded.subject 
+        }
 
         next();
       }
     });
   } else {
-    res.status(401).json({ you: 'no token provided'}) 
+    return res.status(401).json({ status: 'error', message: 'No token provided' }) 
   }
 }
