@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const authRouter = require('../auth/auth-router.js');
 const usersRouter = require('../models/users/users-router.js');
+const mfaRequestsRouter = require('../models/mfa_requests/mfa_requests-router.js');
 const messagesRouter = require('../models/messages/message-router.js');
 const addressesRouter = require('../models/addresses/address-router.js');
 const { webSocketConnect } = require("../websocket/websocket-function")
@@ -27,6 +28,7 @@ serverWS.use(cookies(process.env.JWT_SECRET));
 
 serverWS.use('/api/auth', authRouter);
 serverWS.use('/api/users', usersRouter);
+serverWS.use('/api/mfa', mfaRequestsRouter);
 serverWS.use('/api/messages', messagesRouter);
 serverWS.use('/api/addresses', addressesRouter);
 

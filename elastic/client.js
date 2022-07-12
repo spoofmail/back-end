@@ -6,6 +6,17 @@ const client = new Client({
     auth: { username: 'elastic', password: 'password' }
 })
 
+/*client.deleteByQuery({
+    index: 'email',            
+    body: {
+        query: {
+            match_all: {}
+        }
+    }
+}, function (error, response) {
+    console.log(response);
+});*/
+
 const emailTextSearchString = 'email-text-search'
 client.putScript({
     id: emailTextSearchString,

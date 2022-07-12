@@ -71,11 +71,11 @@ router.post('/login', (req, res) => {
     let { username, password } = req.body;
 
     Users.findByUsername(username)
-        .then(user => {
+        .then(async (user) => {
             if (user) {
-                const result = bcrypt.compare(password, user.password)
+                const passwordCorrect = await bcrypt.compare(password, user.password)
 
-                if (result) {
+                if (passwordCorrect) {
                     const token = generateToken(user)
     
                     res.status(200).json({
@@ -85,6 +85,7 @@ router.post('/login', (req, res) => {
                         user: {
                             userId: user.id,
                             username: user.username,
+                            hasMFA: user.mfa_base32 ? true : false,
                         },
                     });
                 } else {
@@ -114,6 +115,7 @@ function generateToken(user) {
     const jwtPayload = {
         subject: user.id,
         username: user.username,
+        hasMFA: user.mfa_base32 ? true : false,
     };
 
     const jwtSecret = process.env.JWT_SECRET || 'Spoofmail Secret!';

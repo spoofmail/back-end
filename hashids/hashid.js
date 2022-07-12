@@ -5,6 +5,11 @@ const userHash = new HashIds(
     parseInt(process.env.HASH_ID_LENGTH) || 9
 )
 
+const mfaRequestHash = new HashIds(
+    'mfa_requests' + (process.env.HASH_ID_SALT || 'spoofmail'),
+    parseInt(process.env.HASH_ID_LENGTH) || 9
+)
+
 const addressHash = new HashIds(
     'addresses' + (process.env.HASH_ID_SALT || 'spoofmail'), 
     parseInt(process.env.HASH_ID_LENGTH) || 9
@@ -19,6 +24,10 @@ module.exports = {
     userHash: {
         encode: (id) => userHash.encode(parseInt(id)),
         decode: (id) => userHash.decode(id)[0]
+    },
+    mfaRequestHash: {
+        encode: (id) => mfaRequestHash.encode(parseInt(id)),
+        decode: (id) => mfaRequestHash.decode(id)[0]
     },
     addressHash: {
         encode: (id) => addressHash.encode(parseInt(id)),

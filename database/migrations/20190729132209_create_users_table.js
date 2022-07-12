@@ -7,6 +7,7 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       users.string('password', 128).notNullable();
+      users.string('mfa_base32', 256).defaultTo(null);
     });
   };
   

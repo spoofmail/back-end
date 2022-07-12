@@ -10,8 +10,8 @@ const { userHash } = require('../../hashids/hashid.js');
 
 const { elasticEmail } = require('../../elastic/client')
 
-/*const wordsJSON = require('../../data.json')
-const words = Object.keys(wordsJSON)*/
+const wordsJSON = require('../../data.json')
+const words = Object.keys(wordsJSON)
 
 router.get('/all/:page', restricted, (req, res) => {
     const { page } = req.params
@@ -143,7 +143,6 @@ function generateRandomSentence(length) {
     return str
 }
 
-/*
 router.post('/secret/', restricted, async (req, res) => {
     const { address, amount } = req.body
 
@@ -193,11 +192,11 @@ router.post('/secret/', restricted, async (req, res) => {
                     amountGenerated,
                 },
                 error: error,
-            })
+            })*/
             res.status(500).json({ status: 'error', message: 'An error occurred while generating random data', generatedBeforeError: amountGenerated });
         })
 })
-*/
+
 
 router.post('/search', restricted, async (req, res) => {
     const { query, from, size } = req.body
